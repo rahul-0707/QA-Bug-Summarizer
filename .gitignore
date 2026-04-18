@@ -1,0 +1,19 @@
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Project Files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Temporary Files
+scratch/
+test_failure.txt
+sample_log.txt
