@@ -1,0 +1,30 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.0, pytest-8.3.3, pluggy-1.5.0
+rootdir: d:\QA Bug Summarizer
+collected 3 items
+
+mock_test.py FFF                                                         [100%]
+
+================================== FAILURES ===================================
+____________________________ test_frontend_timeout ____________________________
+
+    def test_frontend_timeout():
+        # Simulate a network timeout error when loading a page
+>       raise TimeoutError("Page load timed out after 30000ms. Could not locate element '#submit-button'.")
+E       TimeoutError: Page load timed out after 30000ms. Could not locate element '#submit-button'.
+
+mock_test.py:5: TimeoutError
+___________________________ test_backend_assertion ____________________________
+
+    def test_backend_assertion():
+        # Simulate a failing API assertion
+        response_code = 500
+>       assert response_code == 200, "Expected status code 200 but got 500 for endpoint /api/v1/users"
+E       AssertionError: Expected status code 200 but got 500 for endpoint /api/v1/users
+E       assert 500 == 200
+
+mock_test.py:10: AssertionError
+=========================== short test summary info ===========================
+FAILED mock_test.py::test_frontend_timeout - TimeoutError: Page load timed o...
+FAILED mock_test.py::test_backend_assertion - AssertionError: Expected statu...
+============================== 2 failed in 0.12s ==============================
