@@ -1,0 +1,77 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.0, pytest-8.3.3, pluggy-1.5.0
+rootdir: d:\QA Bug Summarizer
+collected 5 items
+
+integration_tests/test_ui_checkout.py F                                  [ 20%]
+integration_tests/test_api_users.py F                                    [ 40%]
+integration_tests/test_db_sync.py F                                      [ 60%]
+integration_tests/test_auth_flow.py F                                    [ 80%]
+unit_tests/test_billing_calculator.py F                                  [100%]
+
+================================== FAILURES ===================================
+____________________________ test_checkout_button_click ____________________________
+
+    def test_checkout_button_click():
+        # Navigate to cart and attempt to click checkout
+        driver.get("https://shop.example.com/cart")
+>       driver.find_element(By.ID, "checkout-btn").click()
+E       ElementNotInteractableException: Message: element not interactable
+E         (Session info: chrome=123.0.6312.122)
+E       Stacktrace:
+E       #0 0x555c829b3d93 <unknown>
+E       #1 0x555c82672153 <unknown>
+
+integration_tests/test_ui_checkout.py:42: ElementNotInteractableException
+___________________________ test_fetch_user_profile_data ___________________________
+
+    def test_fetch_user_profile_data():
+        # Fetch profile for a non-existent user
+        response = requests.get(f"{API_BASE_URL}/users/9999999")
+>       assert response.status_code == 404, f"Expected 404, got {response.status_code}"
+E       AssertionError: Expected 404, got 500
+E       assert 500 == 404
+
+integration_tests/test_api_users.py:18: AssertionError
+________________________________ test_database_sync_job ________________________________
+
+    def test_database_sync_job():
+        # Trigger sync job and wait for completion
+        sync_manager.trigger_sync()
+>       result = db.query("SELECT status FROM sync_jobs ORDER BY id DESC LIMIT 1").fetchone()
+E       psycopg2.OperationalError: server closed the connection unexpectedly
+E       	This probably means the server terminated abnormally
+E       	before or while processing the request.
+
+integration_tests/test_db_sync.py:55: OperationalError
+_____________________________ test_expired_token_refresh _____________________________
+
+    def test_expired_token_refresh():
+        # Use an expired JWT to request a new access token
+        headers = {"Authorization": f"Bearer {EXPIRED_TOKEN}"}
+        response = requests.post(f"{API_BASE_URL}/auth/refresh", headers=headers)
+>       assert response.json()["message"] == "Token successfully refreshed"
+E       KeyError: 'message'
+E       # Response was actually: {'error': 'Invalid refresh token layout'}
+
+integration_tests/test_auth_flow.py:31: KeyError
+____________________________ test_calculate_tax_for_eu_region ____________________________
+
+    def test_calculate_tax_for_eu_region():
+        cart_total = 100.00
+        region = "EU-DE"
+        expected_tax = 19.00
+        
+        actual_tax = calculate_tax(cart_total, region)
+>       assert actual_tax == expected_tax, f"Tax mismatch. Expected {expected_tax}, got {actual_tax}"
+E       AssertionError: Tax mismatch. Expected 19.0, got 0.0
+E       assert 0.0 == 19.0
+
+unit_tests/test_billing_calculator.py:12: AssertionError
+=========================== short test summary info ===========================
+FAILED integration_tests/test_ui_checkout.py::test_checkout_button_click - ElementNotInteractableException...
+FAILED integration_tests/test_api_users.py::test_fetch_user_profile_data - AssertionError: Expected 404, got 500...
+FAILED integration_tests/test_db_sync.py::test_database_sync_job - psycopg2.OperationalError: server closed the connection...
+FAILED integration_tests/test_auth_flow.py::test_expired_token_refresh - KeyError: 'message'...
+FAILED unit_tests/test_billing_calculator.py::test_calculate_tax_for_eu_region - AssertionError: Tax mismatch...
+============================== 5 failed in 4.52s ==============================

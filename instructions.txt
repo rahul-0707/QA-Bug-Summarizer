@@ -1,0 +1,44 @@
+=========================================
+HOW TO RUN BUGSENSE AI (QA Bug Summarizer)
+=========================================
+
+Follow these step-by-step instructions to run the project on your local machine:
+
+1. SETUP ENVIRONMENT VARIABLES
+-----------------------------------------
+Before running the application, you need to provide your Google Gemini API Key.
+- Create a new file named `.env` in the root directory (if it doesn't already exist).
+- Add the following line to the file, replacing the placeholder with your actual key:
+  GEMINI_API_KEY=your_actual_api_key_here
+  (Note: Keep this file safe. It is protected by .gitignore so it won't be uploaded to GitHub).
+
+
+2. ACTIVATE VIRTUAL ENVIRONMENT
+-----------------------------------------
+Open your terminal (PowerShell) and activate your virtual environment by running:
+  .\venv\Scripts\activate
+
+You should see `(venv)` appear at the start of your terminal prompt.
+
+
+3. INSTALL DEPENDENCIES
+-----------------------------------------
+Install all the required Python packages (Streamlit, Gemini API, Pytest, etc.):
+  pip install -r requirements.txt
+
+
+4. RUN THE APPLICATION
+-----------------------------------------
+Start the Streamlit web server by running:
+  python -m streamlit run app.py
+
+This will automatically open your default web browser and load the BugSense AI dashboard.
+
+
+5. HOW TO USE THE APP (TESTING)
+-----------------------------------------
+If you need a dummy test failure log to test the AI with, you can generate one using the included mock test file.
+Open a new terminal, activate your virtual environment, and run:
+  python -m pytest mock_test.py > test_failure.txt
+
+Then, go to the web dashboard, click "Browse files", and upload the newly created `test_failure.txt` (or the included `sample_log.txt`) to get an AI summary of the bug!
